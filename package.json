@@ -1,0 +1,23 @@
+{
+  "name": "f2f-bank-tests",
+  "version": "1.0.0",
+  "description": "F2F Bank - простое веб-приложение, имитирующее сервис переводов между пользователями в стиле СБП. Пользователи могут регистрироваться, входить в систему, пополнять баланс и отправлять переводы по номеру телефона.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkovFedor/f2f_bank_tests.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MarkovFedor/f2f_bank_tests/issues"
+  },
+  "homepage": "https://github.com/MarkovFedor/f2f_bank_tests#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0"
+  }
+}
