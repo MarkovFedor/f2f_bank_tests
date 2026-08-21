@@ -3,6 +3,10 @@ import { extractBalance } from './sharedFunctions';
 
 test.describe.configure({ mode: 'default' });
 
+const CORRECT_AMOUNT_TO_TRANSFER = 1000;
+const NEGATIVE_AMOUNT_TO_TRANSFER = -1000;
+
+
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost/login');
   await page.getByRole('textbox', { name: "email" }).fill("history.user@mail.ru");
@@ -12,6 +16,13 @@ test.beforeEach(async ({ page }) => {
   await page.getByText('Transfer by phone number').waitFor({ state: 'visible' });
 }
 )
+
+async function waitForBalanceResponse(page: Page, timeout: number = 10000) {
+    return await page.waitForResponse(
+        (resp) => resp.url().includes('/users/transactions') && resp.status() === 200,
+        { timeout }
+    );
+}
 
 async function extractTransactions(page: Page) {
   await page.locator('tbody tr').first().waitFor({ state: 'visible' });
@@ -43,15 +54,14 @@ test('Increase balance with correct amount and check transaction', {
 },
   async ({ page }) => {
     await page.getByRole('link', { name: 'Transactions' }).click();
-    await page.reload();
+    await waitForBalanceResponse(page);
     const lengthOfStatedTransactions = (await extractTransactions(page)).length;
+    const startBalance = await extractBalance(page);
     await page.getByRole('button', { name: 'Add balance' }).waitFor({ state: 'visible' });
     const BALANCE_TO_TOP_UP = 100;
-    const startBalance = await extractBalance(page);
     await page.getByRole('button', { name: 'Add balance' }).click();
     await page.locator('input[name="balance"]').fill(BALANCE_TO_TOP_UP.toString());
     await page.locator('.modal .confirm-btn').click();
-    await page.reload();
     const resultBalance = await extractBalance(page);
     expect(resultBalance).toBe(startBalance + BALANCE_TO_TOP_UP);
 
@@ -72,15 +82,14 @@ test('Increase balance with incorrect amount and check transaction', {
 },
   async ({ page }) => {
     await page.getByRole('link', { name: 'Transactions' }).click();
-    await page.reload();
+    await waitForBalanceResponse(page);
     const lengthOfStatedTransactions = (await extractTransactions(page)).length;
+    const startBalance = await extractBalance(page);
     await page.getByRole('button', { name: 'Add balance' }).waitFor({ state: 'visible' });
     const BALANCE_TO_TOP_UP = -100;
-    const startBalance = await extractBalance(page);
     await page.getByRole('button', { name: 'Add balance' }).click();
     await page.locator('input[name="balance"]').fill(BALANCE_TO_TOP_UP.toString());
     await page.locator('.modal .confirm-btn').click();
-    await page.reload();
     const resultBalance = await extractBalance(page);
     expect(resultBalance).toBe(startBalance);
 
@@ -96,50 +105,49 @@ test('Check transaction after correct transfer', {
 },
   async ({ page }) => {
     await page.getByRole('link', { name: 'Transactions' }).click();
-    await page.reload();
+    await waitForBalanceResponse(page);
     const lengthOfStatedTransactions = (await extractTransactions(page)).length;
     const startBalance = await extractBalance(page);
+    expect(startBalance).toBeGreaterThan(CORRECT_AMOUNT_TO_TRANSFER);
 
     await page.getByRole('link', { name: 'Main' }).click();
     await page.getByText('Transfer by phone number').waitFor({ state: 'visible' });
 
-    const AMOUNT_TO_TRANSFER = 1000;
     await page.locator('input[name="phone"]').fill("+79222110007");
-    await page.locator('input[name="amount"]').fill(AMOUNT_TO_TRANSFER.toString());
+    await page.locator('input[name="amount"]').fill(CORRECT_AMOUNT_TO_TRANSFER.toString());
     await page.locator('input[name="purpose"]').fill("Корректный перевод на номер");
     await page.getByRole('button', { name: "Send" }).click();
     await page.locator('.success-text').waitFor({ state: 'visible' });
 
     await page.getByRole('link', { name: 'Transactions' }).click();
-    await page.reload();
+    await waitForBalanceResponse(page);
     const resultBalance = await extractBalance(page);
-    expect(resultBalance).toBe(startBalance - AMOUNT_TO_TRANSFER);
+    expect(resultBalance).toBe(startBalance - CORRECT_AMOUNT_TO_TRANSFER);
     const transactions = await extractTransactions(page);
     expect(transactions.length).toBe(lengthOfStatedTransactions + 1);
     const transaction = transactions[0];
     expect(transaction.type).toBe("withdrawal");
-    expect(transaction.amount).toBe(AMOUNT_TO_TRANSFER.toString());
+    expect(transaction.amount).toBe(CORRECT_AMOUNT_TO_TRANSFER.toString());
     expect(transaction.status).toBe("completed");
   });
 
 test('Check transaction after incorrect transfer', {
   annotation: [
-    { type: 'id', description: 'HIST-03' },
+    { type: 'id', description: 'HIST-04' },
     { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
     await page.getByRole('link', { name: 'Transactions' }).click();
-    await page.reload();
+    await waitForBalanceResponse(page);
     const lengthOfStatedTransactions = (await extractTransactions(page)).length;
     const startBalance = await extractBalance(page);
 
     await page.getByRole('link', { name: 'Main' }).click();
     await page.getByText('Transfer by phone number').waitFor({ state: 'visible' });
 
-    const AMOUNT_TO_TRANSFER = -1000;
     await page.locator('input[name="phone"]').fill("+79222110007");
-    await page.locator('input[name="amount"]').fill(AMOUNT_TO_TRANSFER.toString());
+    await page.locator('input[name="amount"]').fill(NEGATIVE_AMOUNT_TO_TRANSFER.toString());
     await page.locator('input[name="purpose"]').fill("Корректный перевод на номер");
     await page.getByRole('button', { name: "Send" }).click();
 

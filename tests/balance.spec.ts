@@ -14,9 +14,6 @@ test.beforeEach(async ({ page }, testInfo) => {
   await page.getByRole('button', { name: 'Login' }).click();
   await page.waitForResponse(response => response.status() == 200)
   await page.getByRole('link', { name: 'Transactions' }).click();
-  await page.reload();
-  const html = await page.content();
-  await testInfo.attach('page-html', { body: html, contentType: 'text/html' });
   await page.getByRole('button', { name: 'Add balance' }).waitFor({ state: 'visible' });
 }
 )
@@ -32,7 +29,6 @@ test('Balance top up for available amount', {
     await page.getByRole('button', { name: 'Add balance' }).click();
     await page.locator('input[name="balance"]').fill(CORRECT_AMOUNT_TO_TOP_UP.toString());
     await page.locator('.modal .confirm-btn').click();
-    await page.reload();
     const resultBalance = await extractBalance(page);
     expect(resultBalance).toBe(startBalance + CORRECT_AMOUNT_TO_TOP_UP);
   });
@@ -48,7 +44,6 @@ test('Balance top up for negative amount', {
     await page.getByRole('button', { name: 'Add balance' }).click();
     await page.locator('input[name="balance"]').fill(NEGATIVE_AMOUNT_TO_TOP_UP.toString());
     await page.locator('.modal .confirm-btn').click();
-    await page.reload();
     const resultBalance = await extractBalance(page);
     expect(resultBalance).toBe(startBalance);
   });
@@ -64,7 +59,9 @@ test('Balance top up for 0 amount', {
     await page.getByRole('button', { name: 'Add balance' }).click();
     await page.locator('input[name="balance"]').fill(ZERO_AMOUNT_TO_TOP_UP.toString());
     await page.locator('.modal .confirm-btn').click();
-    await page.reload();
     const resultBalance = await extractBalance(page);
     expect(resultBalance).toBe(startBalance);
   });
+
+
+

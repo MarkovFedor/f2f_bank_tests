@@ -85,13 +85,13 @@ test('Transfer incorrect amount to correct number', {
 
 test('Transfer correct amount to correct number with not enough', {
   annotation: [
-    { type: 'id', description: 'TRNR-02' },
+    { type: 'id', description: 'TRNR-04' },
     { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
     const startBalance = await extractBalance(page);
-    const AMOUNT_TO_TRANSFER_WTIH_ADJUST = CORRECT_AMOUNT_TO_TRANSFER + 1000;
+    const AMOUNT_TO_TRANSFER_WTIH_ADJUST = startBalance + 1000;
     await page.locator('input[name="phone"]').fill("+79222110007");
     await page.locator('input[name="amount"]').fill(AMOUNT_TO_TRANSFER_WTIH_ADJUST.toString());
     await page.locator('input[name="purpose"]').fill("Перевод выше баланса");
@@ -102,3 +102,23 @@ test('Transfer correct amount to correct number with not enough', {
     const balance = await extractBalance(page);
     expect(balance).toBe(startBalance);
   });
+
+test('Transfer 0 amount to correct number', {
+  annotation: [
+    { type: 'id', description: 'TRNR-05' },
+    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
+  ]
+},
+  async ({ page }) => {
+    const startBalance = await extractBalance(page);
+    await page.locator('input[name="phone"]').fill("+79222110007");
+    await page.locator('input[name="amount"]').fill(ZERO_AMOUNT_TO_TRANSFER.toString());
+    await page.locator('input[name="purpose"]').fill("Перевод выше баланса");
+    await page.getByRole('button', { name: "Send" }).click();
+    const errorSnackbar = page.locator('.snackbar.error');
+    await expect(errorSnackbar).toBeVisible({ timeout: 2000 });
+    await expect(errorSnackbar).toHaveText('Amount must be greater than zero');
+    const balance = await extractBalance(page);
+    expect(balance).toBe(startBalance);
+  });
+
