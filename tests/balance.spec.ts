@@ -21,7 +21,6 @@ test.beforeEach(async ({ page }, testInfo) => {
 test('Balance top up for available amount', {
   annotation: [
     { type: 'id', description: 'BLNC-01' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -36,7 +35,6 @@ test('Balance top up for available amount', {
 test('Balance top up for negative amount', {
   annotation: [
     { type: 'id', description: 'BLNC-02' },
-    { type: 'issue', description: '' }
   ]
 },
   async ({ page }) => {
@@ -51,7 +49,6 @@ test('Balance top up for negative amount', {
 test('Balance top up for 0 amount', {
   annotation: [
     { type: 'id', description: 'BLNC-03' },
-    { type: 'issue', description: '' }
   ]
 },
   async ({ page }) => {

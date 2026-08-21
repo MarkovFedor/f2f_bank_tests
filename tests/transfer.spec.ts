@@ -30,7 +30,6 @@ test.beforeEach(async ({ page }) => {
 test('Transfer correct amount to correct number', {
   annotation: [
     { type: 'id', description: 'TRNR-01' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -49,7 +48,6 @@ invalidPhoneNumbers.forEach(({ phone, description }) => {
   test(`Transfer correct amount to incorrect number: ${phone}`, {
     annotation: [
       { type: 'id', description: 'TRNR-02' },
-      { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
     ]
   },
     async ({ page }) => {
@@ -67,7 +65,6 @@ invalidPhoneNumbers.forEach(({ phone, description }) => {
 test('Transfer incorrect amount to correct number', {
   annotation: [
     { type: 'id', description: 'TRNR-03' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -86,7 +83,6 @@ test('Transfer incorrect amount to correct number', {
 test('Transfer correct amount to correct number with not enough', {
   annotation: [
     { type: 'id', description: 'TRNR-04' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -106,7 +102,6 @@ test('Transfer correct amount to correct number with not enough', {
 test('Transfer 0 amount to correct number', {
   annotation: [
     { type: 'id', description: 'TRNR-05' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {

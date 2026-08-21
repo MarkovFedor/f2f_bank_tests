@@ -49,7 +49,6 @@ async function extractTransactions(page: Page) {
 test('Increase balance with correct amount and check transaction', {
   annotation: [
     { type: 'id', description: 'HIST-01' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -77,7 +76,6 @@ test('Increase balance with correct amount and check transaction', {
 test('Increase balance with incorrect amount and check transaction', {
   annotation: [
     { type: 'id', description: 'HIST-02' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -100,7 +98,6 @@ test('Increase balance with incorrect amount and check transaction', {
 test('Check transaction after correct transfer', {
   annotation: [
     { type: 'id', description: 'HIST-03' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
@@ -134,7 +131,6 @@ test('Check transaction after correct transfer', {
 test('Check transaction after incorrect transfer', {
   annotation: [
     { type: 'id', description: 'HIST-04' },
-    { type: 'issue', description: 'https://docs.google.com/spreadsheets/d/10_uQOl30zzW0tErT7AcuVMNVRa4YzgPUxcB3ZtI3qtY/edit?gid=0#gid=0&range=A2' }
   ]
 },
   async ({ page }) => {
